@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nível de Nerdice (Ndn)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-sizing: border-box; /* Adds padding inside the box */
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #resultado {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <form id="nerdForm">
+        <input type="number" id="tn" placeholder="Tempo Nerd (TN) em horas" required><br>
+        <input type="number" id="nppc" placeholder="Número de Pessoas que você Pegou Casualmente (NPPC)" required><br>
+        <input type="number" id="idade" placeholder="Idade" required><br>
+        <input type="number" id="pf" placeholder="Porcentagem para Ficção (F)" required><br>
+        <input type="number" id="pc" placeholder="Porcentagem para Ciência (C)" required><br>
+        <input type="number" id="pm" placeholder="Porcentagem para Matemática (M)" required><br>
+        <input type="number" id="ph" placeholder="Porcentagem para Humanas (H)" required><br>
+        <input type="number" id="pj" placeholder="Porcentagem para Jogos (J)" required><br>
+        <button type="button" onclick="calcularNdn()">Calcular Ndn</button>
+        <p id="resultado"></p>
+    </form>
+
+    <script>
+        function calcularNdn() {
+            const tn = parseFloat(document.getElementById('tn').value) || 0;
+            const nppc = parseInt(document.getElementById('nppc').value) || 0;
+            const idade = parseInt(document.getElementById('idade').value) || 0;
+            const pf = parseFloat(document.getElementById('pf').value) || 0;
+            const pc = parseFloat(document.getElementById('pc').value) || 0;
+            const pm = parseFloat(document.getElementById('pm').value) || 0;
+            const ph = parseFloat(document.getElementById('ph').value) || 0;
+            const pj = parseFloat(document.getElementById('pj').value) || 0;
+
+            // Verificação da soma das porcentagens
+            const somaPorcentagens = pf + pc + pm + ph + pj;
+            if (somaPorcentagens !== 100) {
+                document.getElementById('resultado').textContent = "Ndn: ∅ (A soma das porcentagens deve ser igual a 100.)";
+                return;
+            }
+
+            // Cálculo de tempos dedicados a cada categoria
+            const tempos = [
+                (pf / 100) * tn,
+                (pc / 100) * tn,
+                (pm / 100) * tn,
+                (ph / 100) * tn,
+                (pj / 100) * tn,
+            ];
+
+            // Cálculo da VCN
+            const media = tempos.reduce((a, b) => a + b, 0) / tempos.length;
+            const vcn = tempos.reduce((acc, val) => acc + (val - media) ** 2, 0) / tempos.length;
+
+            // Cálculo do Ndn
+            const ndn = Math.log(tn / (((1 + nppc) ** 2 / idade) * (1 / (1 + vcn))));
+
+            document.getElementById('resultado').textContent = `Ndn: ${ndn.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
+
