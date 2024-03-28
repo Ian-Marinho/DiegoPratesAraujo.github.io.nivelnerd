@@ -92,12 +92,11 @@
             const media = tempos.reduce((a, b) => a + b, 0) / tempos.length;
             const vcn = tempos.reduce((acc, val) => acc + (val - media) ** 2, 0) / tempos.length;
 
-            // Cálculo do Ndn
-            const ndn = Math.log(tn / (((1 + nppc) ** 2 / idade) * (1 / (1 + vcn))));
+            // Cálculo do Ndn com log adicional
+            const ndn = (Math.log(tn ** 8/ (((1 + nppc) ** 2 / idade** 2) * (1 / (1 + vcn)))));
 
             document.getElementById('resultado').textContent = `Ndn: ${ndn.toFixed(2)}`;
         }
     </script>
 </body>
 </html>
-
